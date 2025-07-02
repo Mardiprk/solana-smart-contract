@@ -20,4 +20,20 @@ describe("solana-smart-contract", () =>{
     const account = await program.account.dataAccount.fetch(dataAccount.publicKey);
     console.log("Stored Message: ", account.message);
   });
+
+  it("update message", async () => {
+    const [dataPda] = anchor.web3.PublicKey.findProgramAddressSync(
+      [Buffer.from("data"), provider.wallet.publicKey.toBuffer()],
+      program.programId
+    );
+
+    await program.methods.updateMessage("Update SOL").accounts({
+      data: dataPda,
+      user: provider.wallet.publicKey
+    }).rpc();
+
+    const updated = await program.account.dataAccount.fetch(dataPda);
+    console.log("Updated Message: ", updated.message);
+  })
+  
 });
