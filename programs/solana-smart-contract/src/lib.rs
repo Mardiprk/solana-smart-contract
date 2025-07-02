@@ -71,4 +71,6 @@ pub struct DataAccount {
 pub enum ErrorMessage {
     #[msg("Message cannot be empty")]
     EmptyMessage,
+    #[msg("Empty String")]
+    EmptyString,
 }
