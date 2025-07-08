@@ -11,7 +11,7 @@ pub mod sysvar {
         emit!(MyEvent { value: 42 });
         emit!(MySecondEvent {
             value: 25,
-            message: *b"2026 is the year I'm gonna get a 100k job",
+            message: "2026 is the year I'm gonna get a 100k job".to_string(),
         });
         let _stake_history = &ctx.accounts.stake_history;
         msg!("Accessed Stake History sysvar account successfully.");
@@ -32,5 +32,5 @@ pub struct MyEvent {
 #[event]
 pub struct MySecondEvent {
     pub value: u64,
-    pub message: [u8; 44],
+    pub message: String,
 }
