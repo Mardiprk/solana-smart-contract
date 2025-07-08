@@ -6,22 +6,17 @@ declare_id!("FXF4PruD9YkoGuiGbRD8yAQSShtQDeYrhYYWZy4Nm7bS");
 pub mod solana_smart_contract {
     use super::*;
 
-    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-        some_internal_function::internal_function();
+    pub fn add_two_numbers(ctx: Context<Initialize>, x: u64, y: u64) -> Result<()> {
+        let result = calculate::add(x, y);
+        msg!("Addition of  {} + {} : {}", x, y, result);
         Ok(())
     }
-    pub mod some_internal_function {
-        pub fn internal_function() -> u64 {
-            2
-        }
-    }
+
 }
 
-mod do_something { 
-    use crate::func_test;
-
-    pub fn inside_some_something() {
-        func_test::some_internal_function::internal_function();
+mod calculate {
+    pub fn add(x: u64, y: u64) -> u64 {
+        x + y
     }
 }
 
