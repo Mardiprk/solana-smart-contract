@@ -8,6 +8,8 @@ pub mod sysvar {
     use super::*;
 
     pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
+        emit!(MyEvent{ value: 42});
+        emit!(MySecondEvent{ value: 25, message: "2026 is the year i'm gonna get a 100k job".to_string()});
         let stake_history = &ctx.accounts.stake_history;
         msg!("Accessed Stake History sysvar account successfully.");
         Ok(())
@@ -17,4 +19,15 @@ pub mod sysvar {
 #[derive(Accounts)]
 pub struct Initialize<'info> {
     pub stake_history: Sysvar<'info, StakeHistory>,
+}
+
+#[derive(Accounts)]
+pub struct MyEvent{
+    pub value: u64
+}
+
+#[derive(Accounts)]
+pub struct MySecondEvent{
+    pub value: u64,
+    pub message: String,
 }
