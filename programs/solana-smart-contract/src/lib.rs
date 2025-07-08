@@ -1,4 +1,5 @@
 use anchor_lang::prelude::*;
+use chrono;
 
 declare_id!("FXF4PruD9YkoGuiGbRD8yAQSShtQDeYrhYYWZy4Nm7bS");
 
@@ -6,18 +7,12 @@ declare_id!("FXF4PruD9YkoGuiGbRD8yAQSShtQDeYrhYYWZy4Nm7bS");
 pub mod solana_smart_contract {
     use super::*;
 
-    pub fn add_two_numbers(ctx: Context<Initialize>, x: u64, y: u64) -> Result<()> {
-        let result = calculate::add(x, y);
-        msg!("Addition of  {} + {} : {}", x, y, result);
+    pub fn add_two_numbers(ctx: Context<Initialize>) -> Result<()> {
+        let rent_var = Rent::get()?;
+        msg("Rent {:?}", rent_var);
         Ok(())
     }
 
-}
-
-mod calculate {
-    pub fn add(x: u64, y: u64) -> u64 {
-        x + y
-    }
 }
 
 #[derive(Accounts)]
