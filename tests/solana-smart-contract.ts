@@ -1,39 +1,14 @@
 import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
-import {SolanaSmartContract} from '../target/types/solana_smart_contract';
+import {Sysvar} from "../target/types/sysvar";
 
-describe("solana-smart-contract", () =>{
-  const provider = anchor.AnchorProvider.env();
-  anchor.setProvider(provider);
+describe("sysvar", () => {
+  anchor.setProvider(anchor.AnchorProvider.env());
 
-  const program = anchor.workspace.SolanaSmartContract as Program<SolanaSmartContract>;
+  const program = anchor.workspace.Sysvar as Program<Sysvar>;
 
-  it("initialize the test", async () =>{
-    const dataAccount = anchor.web3.Keypair.generate();
-
-    await program.methods.initialize("Hello, SOLANA").accounts({
-      data: dataAccount.publicKey,
-      user: provider.wallet.publicKey,
-      systemProgram: anchor.web3.SystemProgram.programId,
-    }).signers([dataAccount]).rpc();
-
-    const account = await program.account.dataAccount.fetch(dataAccount.publicKey);
-    console.log("Stored Message: ", account.message);
+  it("Initialize", async () =>{
+    const tx = await program.methods.initialize().rpc();
+    console.log("Your Transaction signature: {}", tx);
   });
-
-  it("update message", async () => {
-    const [dataPda] = anchor.web3.PublicKey.findProgramAddressSync(
-      [Buffer.from("data"), provider.wallet.publicKey.toBuffer()],
-      program.programId
-    );
-
-    await program.methods.updateMessage("Update SOL").accounts({
-      data: dataPda,
-      user: provider.wallet.publicKey
-    }).rpc();
-
-    const updated = await program.account.dataAccount.fetch(dataPda);
-    console.log("Updated Message: ", updated.message);
-  })
-  
 });
