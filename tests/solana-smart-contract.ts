@@ -1,25 +1,20 @@
 import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
-import {Sysvar} from "../target/types/sysvar";
+import {Day14} from "../target/types/day14";
 
-describe("sysvar", () => {
-  const provider = anchor.AnchorProvider.env();
+describe("Day14", () => {
+  anchor.setProvider(anchor.AnchorProvider.env());
+  const program = anchor.workspace.Day14 as Program<Day14>;
 
-  anchor.setProvider(provider);
-
-  const program = anchor.workspace.Sysvar as Program<Sysvar>;
-
-  it("initializes and read events", async () => {
-    const txSig = await program.methods.initialize().rpc();
-    console.log("Tx Signature:", txSig);
-
-    const tx = await provider.connection.getTransaction(txSig,{
-      commitment:"confirmed",
-      maxSupportedTransactionVersion: 0,
-    });
-
-    const logs = tx?.meta?.logMessages ?? [];
-    console.log("Program Logs:");
-    logs.forEach(log => console.log(log));
+  it("signer checker", async () => {
+    const tx = await program.methods
+      .initialize()
+      .accounts({
+        signer: program.provider.publicKey,
+      })
+      .rpc();
+    console.log("he Signer: ", program.provider.publicKey.toBase58());
+    console.log("TX Signature: ", tx);
   });
 });
+  
