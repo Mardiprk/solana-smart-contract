@@ -12,4 +12,21 @@ pub mod compute_unit {
 }
 
 #[derive(Accounts)]
-pub struct Initialize {}
+pub struct Initialize<'info> {
+    #[account(
+        init,
+        payer = signer,
+        space = 8 + size_of::<MyStorage>(),
+        seeds = [],
+        bump,
+    )]
+    pub my_storeage: Account<'info, MyStorage>,
+    #[account(mut)]
+    pub signer: Signer<'info>,
+    pub system_program: Program<'info, System>,
+}
+
+#[account]
+pub struct MyStorage {
+    x: u64,
+}
