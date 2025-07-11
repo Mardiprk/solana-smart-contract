@@ -9,6 +9,17 @@ pub mod compute_unit {
     pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
         Ok(())
     }
+
+    pub fn set(ctx: Context<Set>, new_x: u64) -> Result<()> {
+        ctx.accounts.my_storage.x = new_x;
+        Ok(())
+    }
+}
+
+#[derive(Accounts)]
+pub struct Set<'info> {
+    #[account(mut, seeds = [], bump)]
+    pub my_storage: Account<'info, MyStorage>,
 }
 
 #[derive(Accounts)]
