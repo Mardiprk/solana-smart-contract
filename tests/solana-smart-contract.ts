@@ -8,7 +8,12 @@ describe("compute_unit", ()=>{
   const program = anchor.workspace.ComputeUnit as Program<ComputeUnit>;
   
   it("Initialize", async () => {
-    const tx = await program.methods.initialize().rpc();
-    console.log("YOUR TX: ", tx);
+    const seeds = [];
+
+    const [myStorage, _bump] = anchor.web3.PublicKey.findProgramAddressSync(seeds, program.programId);
+
+    console.log("The storage account address is", myStorage.toBase58());
+
+    await program.methods.initialize().accounts({ myStorage: myStorage}).rpc();
   });
 });
